@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 Companies</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header-actions">
+            <h1>2026 Companies Database</h1>
+            <a href="/add" class="add-btn">+ Add New Company</a>
+        </div>
+        
+        <div class="search-container">
+            <form action="/" method="GET">
+                <input type="text" name="q" placeholder="Search all columns..." value="<%= searchQuery %>" class="search-input">
+                <button type="submit" class="search-btn">Search</button>
+                <% if (searchQuery) { %>
+                    <a href="/" class="clear-btn">Clear</a>
+                <% } %>
+            </form>
+        </div>
+        
+        <% if (companies && companies.length > 0) { %>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <% Object.keys(companies[0]).forEach(function(key) { %>
+                                <th><%= key %></th>
+                            <% }) %>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% companies.forEach(function(company) { %>
+                            <tr>
+                                <% Object.values(company).forEach(function(value) { %>
+                                    <td><%= value %></td>
+                                <% }) %>
+                                <td>
+                                    <a href="/edit/<%= company.id %>" class="edit-btn">Edit</a>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        <% } else { %>
+            <p class="no-results">No companies found.</p>
+        <% } %>
+    </div>
+</body>
+</html>

@@ -1,0 +1,16 @@
+/* Add a black background color to the top navigation bar */
+.topnav {
+  padding: 20px;
+  margin-top: 50vh;
+  display: flex;
+  position: relative;
+  background-color: #aab;
+  font-size: 16px;
+}
+.searchhh {
+  font-size: 1.1em;
+  width: 30em;
+  height: 3em;
+  display: flex;
+  margin: auto;
+}
