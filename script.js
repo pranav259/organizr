@@ -24,7 +24,7 @@ async function getColumns() {
   const result = await db.query(`
     SELECT column_name 
     FROM information_schema.columns 
-    WHERE table_name = '2026_companies' AND column_name != 'id'
+    WHERE table_name = 'kompany' AND column_name != 'serial_no'
   `);
   return result.rows.map((row) => row.column_name);
 }
@@ -36,10 +36,10 @@ app.get("/", async (req, res) => {
     let result;
 
     if (searchQuery) {
-      const sql = `SELECT * FROM "2026_companies" WHERE "2026_companies"::text ILIKE $1 ORDER BY "Seial_no." ASC`;
+      const sql = `SELECT * FROM "kompany" WHERE "kompany"::text ILIKE $1 ORDER BY "serial_no" ASC`;
       result = await db.query(sql, [`%${searchQuery}%`]);
     } else {
-      result = await db.query('SELECT * FROM "2026_companies" ORDER BY "Seial_no." ASC');
+      result = await db.query('SELECT * FROM "kompany" ORDER BY "serial_no" ASC');
     }
 
     res.render("index.ejs", {
@@ -69,9 +69,9 @@ app.post("/add", async (req, res) => {
     const keys = Object.keys(req.body);
     const values = Object.values(req.body);
 
-    // Dynamically builds: INSERT INTO "2026_companies" ("col1", "col2") VALUES ($1, $2)
+    // Dynamically builds: INSERT INTO "kompany" ("col1", "col2") VALUES ($1, $2)
     const placeholders = keys.map((_, i) => `$${i + 1}`).join(", ");
-    const sql = `INSERT INTO "2026_companies" (${keys.map((k) => `"${k}"`).join(", ")}) VALUES (${placeholders})`;
+    const sql = `INSERT INTO "kompany" (${keys.map((k) => `"${k}"`).join(", ")}) VALUES (${placeholders})`;
 
     await db.query(sql, values);
     res.redirect("/"); // Go back to home page after saving
@@ -82,10 +82,10 @@ app.post("/add", async (req, res) => {
 });
 
 // --- EDIT: Show Form ---
-app.get("/edit/:id", async (req, res) => {
+app.get("/edit/:serial_no", async (req, res) => {
   try {
-    const id = req.params.id;
-    const result = await db.query('SELECT * FROM "2026_companies" WHERE id = $1', [id]);
+    const id = req.params.serial_no;
+    const result = await db.query('SELECT * FROM "kompany" WHERE serial_no = $1', [id]);
     const columns = await getColumns();
 
     if (result.rows.length === 0) return res.status(404).send("Company not found");
@@ -98,17 +98,17 @@ app.get("/edit/:id", async (req, res) => {
 });
 
 // --- EDIT: Handle Database Update ---
-app.post("/edit/:id", async (req, res) => {
+app.post("/edit/:serial_no", async (req, res) => {
   try {
-    const id = req.params.id;
+    const serial_no = req.params.id;
     const keys = Object.keys(req.body);
     const values = Object.values(req.body);
 
-    // Dynamically builds: UPDATE "2026_companies" SET "col1" = $1, "col2" = $2 WHERE id = $3
+    // Dynamically builds: UPDATE "kompany" SET "col1" = $1, "col2" = $2 WHERE id = $3
     const setClause = keys.map((k, i) => `"${k}" = $${i + 1}`).join(", ");
-    const sql = `UPDATE "2026_companies" SET ${setClause} WHERE id = $${keys.length + 1}`;
+    const sql = `UPDATE "kompany" SET ${setClause} WHERE serial_no = $${keys.length + 1}`;
 
-    await db.query(sql, [...values, id]);
+    await db.query(sql, [...values, serial_no]);
     res.redirect("/");
   } catch (err) {
     console.error(err);

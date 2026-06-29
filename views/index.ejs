@@ -34,19 +34,18 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <% companies.forEach(function(company) { %>
-                            <tr>
-                                <% Object.values(company).forEach(function(value) { %>
-                                    <td><%= value %></td>
-                                <% }) %>
-                                <td>
-                                    <a href="/edit/<%= company.id %>" class="edit-btn">Edit</a>
-                                </td>
-                            </tr>
-                        <% }) %>
-                    </tbody>
-                </table>
+<tbody>
+    <% companies.forEach(function(company) { %>
+        <tr>
+            <% Object.values(company).forEach(function(value) { %>
+                <td title="<%= value %>"><%= value %></td>
+            <% }) %>
+            <td>
+                <a href="/edit/<%= company.serial_no %>" class="edit-btn">Edit</a>
+            </td>
+        </tr>
+    <% }) %>
+</tbody>                </table>
             </div>
         <% } else { %>
             <p class="no-results">No companies found.</p>
